@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <form method="POST">
+        <input type="text" name="newListName" placeholder="new list name"><br>
+        <button formaction="/modifyLists/newListName">change</button><br>
+        <input type="text" name="newCardName" placeholder="new card name"><br>
+        <button formaction="/modifyLists/newCardName">change</button><br>
+        <input type="text" name="newDescription" placeholder="new description"><br>
+        <button formaction="/modifyLists/newDescription">change</button>
+        <input type="text" name="emails" placeholder="enter emails"><br>
+        <button formaction="/modifyLists/add">Add</button>
+        <button formaction="/modifyLists/delete">Delete</button>
+    </form>    
+</body>
+</html>
