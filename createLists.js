@@ -9,23 +9,25 @@ router.use(bodyParser.urlencoded({extended: true}));
 router.use(express.json());
 
 const dbconnect = require("./user methods/connection.js");
-const { getMaxListeners } = require("process");
-var con = dbconnect.connection();
 
-var boardName;
+const con = dbconnect.connection();
+
+let boardName;
 
 router.get("/:id",function(req,res){
+
     boardName = req.params.id;
     res.sendFile(__dirname+"/html/createList.html")
-
-    
+   
 })
-var x;
+
+let x;
+
 router.post("/",function(req,res){
     
     var listName = req.body.listName;
-    var id = randomGen.randomGen();
-    id = id.toString();
+    var id = randomGen.randomGen().toString();
+
     var sql = "insert into lists values ("+mysql.escape(id)+","+mysql.escape(listName)+","+"null);";
     con.query(sql,function(err,result,fields){
         if(err) throw err;
@@ -39,10 +41,7 @@ router.post("/",function(req,res){
         x=x+id+',';
         boardUpdate.update(x,boardName);
                            
-    })
-    
-
-    
+    }) 
 })
 
 module.exports=router;
