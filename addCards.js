@@ -10,9 +10,9 @@ router.use(express.json());
 
 const dbconnect = require("./user methods/connection.js");
 const listCardsUpdate = require("./user methods/listCardsUpdate");
-var con =dbconnect.connection();
+const con =dbconnect.connection();
 
-var listName,boardName ;
+let listName,boardName ;
 
 router.get("/:id1/:id2",function(req,res){
     listName = req.params.id2;
@@ -21,25 +21,27 @@ router.get("/:id1/:id2",function(req,res){
 })
 
 router.post("/",function(req,res){
-    var name = req.body.name;
-    var description = req.body.description;
-    var users = req.body.users;
-    var id = randomGen.randomGen();
-    id = id.toString();
-    var email = (emailExtractor.email(users));
-    var len = email.length;
-    for(var i=0;i<len;i++){
-        var sql = "insert into cards values("+mysql.escape(id)+","+mysql.escape(name)+","+mysql.escape(description)+","+mysql.escape(email[i])+");";
+    let name = req.body.name;
+    let description = req.body.description;
+    let users = req.body.users;
+    let id = randomGen.randomGen().toString();
+
+    let email = (emailExtractor.email(users));
+
+    email.forEach(email => {
+        let sql = "insert into cards values("+mysql.escape(id)+","+mysql.escape(name)+","+mysql.escape(description)+","+mysql.escape(email)+");";
         con.query(sql,function(err,result,fields){
             if(err) throw err;
             console.log('card created');
         })
-    }
-    var sql = "select cards,lists.id from lists,boards where boards.name="+mysql.escape(boardName)+" and lists.name="+mysql.escape(listName)+" limit 1;"
+                
+    });
+
+    let sql = "select cards,lists.id from lists,boards where boards.name="+mysql.escape(boardName)+" and lists.name="+mysql.escape(listName)+" limit 1;"
     con.query(sql,function(err,result,fields){
         if (err) throw err; 
-        var x = (result[0].cards); 
-        var list_id = result[0].id; 
+        let x = (result[0].cards); 
+        let list_id = result[0].id; 
         if(x==null) x="";
         x=x+id+',';
         listCardsUpdate.update(x,listName,list_id);
