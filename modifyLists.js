@@ -9,9 +9,9 @@ router.use(express.json());
 
 const dbconnect = require("./user methods/connection.js");
 const { route } = require("./createBoard.js");
-var con =dbconnect.connection();
+const con =dbconnect.connection();
 
-var boardName, listName, cardName;
+let boardName, listName, cardName;
 router.get("/:id1/:id2/:id3",function(req,res){
     boardName = req.params.id1;
     listName = req.params.id2;
@@ -20,12 +20,12 @@ router.get("/:id1/:id2/:id3",function(req,res){
 })
 
 router.post("/newListName",function(req,res){
-    var newListName = req.body.newListName;
-    var sql = "select lists.id from lists,boards where boards.name="+mysql.escape(boardName)+" and lists.name="+mysql.escape(listName)+" limit 1;"
+    let newListName = req.body.newListName;
+    let sql = "select lists.id from lists,boards where boards.name="+mysql.escape(boardName)+" and lists.name="+mysql.escape(listName)+" limit 1;"
     con.query(sql,function(err,result,fields){
         if(err) throw err;
-        var id = result[0].id;
-        var newsql = "update lists set name = "+mysql.escape(newListName)+" where id = "+mysql.escape(id)+";";
+        let id = result[0].id;
+        let newsql = "update lists set name = "+mysql.escape(newListName)+" where id = "+mysql.escape(id)+";";
         con.query(newsql,function(err,result,fields){
             if(err) throw err;
             console.log('updated list name');
@@ -34,12 +34,12 @@ router.post("/newListName",function(req,res){
 })
 
 router.post("/newCardName",function(req,res){
-    var newCardName = req.body.newCardName;
-    var sql = "select cards.id from lists,boards,cards where boards.name = "+mysql.escape(boardName)+"and lists.name = "+mysql.escape(listName)+"and cards.name = "+mysql.escape(cardName)+" limit 1;";
+    let newCardName = req.body.newCardName;
+    let sql = "select cards.id from lists,boards,cards where boards.name = "+mysql.escape(boardName)+"and lists.name = "+mysql.escape(listName)+"and cards.name = "+mysql.escape(cardName)+" limit 1;";
     con.query(sql,function(err,result,fields){
         if(err) throw err;
-        var id = result[0].id;
-        var newsql = "update cards set name = "+mysql.escape(newCardName)+"where id = "+mysql.escape(id)+";"
+        let id = result[0].id;
+        let newsql = "update cards set name = "+mysql.escape(newCardName)+"where id = "+mysql.escape(id)+";"
         con.query(newsql,function(err,result,fields){
             if(err) throw err;
             console.log('updated card name');
@@ -48,12 +48,12 @@ router.post("/newCardName",function(req,res){
 })
 
 router.post("/newDescription",function(req,res){
-    var newDescription = req.body.newDescription;
-    var sql = "select cards.id from lists,boards,cards where boards.name = "+mysql.escape(boardName)+"and lists.name = "+mysql.escape(listName)+"and cards.name = "+mysql.escape(cardName)+" limit 1;";
+    let newDescription = req.body.newDescription;
+    let sql = "select cards.id from lists,boards,cards where boards.name = "+mysql.escape(boardName)+"and lists.name = "+mysql.escape(listName)+"and cards.name = "+mysql.escape(cardName)+" limit 1;";
     con.query(sql,function(err,result,fields){
         if(err) throw err;
-        var id = result[0].id;
-        var newsql = "update cards set description = "+mysql.escape(newDescription)+"where id = "+mysql.escape(id)+";"
+        let id = result[0].id;
+        let newsql = "update cards set description = "+mysql.escape(newDescription)+"where id = "+mysql.escape(id)+";"
         con.query(newsql,function(err,result,fields){
             if(err) throw err;
             console.log('updated card description');
@@ -62,37 +62,39 @@ router.post("/newDescription",function(req,res){
 })
 
 router.post("/add",function(req,res){
-    var emails = req.body.emails;
-    var email_array = (emailExtractor.email(emails));
-    var len = email_array.length;
-    var sql = "select cards.id,cards.description from lists,boards,cards where boards.name = "+mysql.escape(boardName)+"and lists.name = "+mysql.escape(listName)+"and cards.name = "+mysql.escape(cardName)+" limit 1;";
+    let emails = req.body.emails;
+    let email_array = (emailExtractor.email(emails));
+    let sql = "select cards.id,cards.description from lists,boards,cards where boards.name = "+mysql.escape(boardName)+"and lists.name = "+mysql.escape(listName)+"and cards.name = "+mysql.escape(cardName)+" limit 1;";
+
     con.query(sql,function(err,result,fields){
-        var id = result[0].id;
-        var desc = result[0].description;
-        for(var i=0;i<len;i++){
-            var insertsql = "insert into cards values("+mysql.escape(id)+","+mysql.escape(cardName)+","+mysql.escape(desc)+","+mysql.escape(email_array[i])+");";
+        let id = result[0].id;
+        let desc = result[0].description;
+        email_array.forEach( email_array => {
+            let insertsql = "insert into cards values("+mysql.escape(id)+","+mysql.escape(cardName)+","+mysql.escape(desc)+","+mysql.escape(email_array)+");";
             con.query(insertsql,function(err,result,fields){
                 if(err) throw err;
                 console.log('updated cards users');
-            })
-        }
+            })            
+        });
     })
 })
 
 router.post("/delete",function(req,res){
-    var emails = req.body.emails;
-    var email_array = (emailExtractor.email(emails));
-    var len = email_array.length;
-    var sql = "select cards.id from lists,boards,cards where boards.name = "+mysql.escape(boardName)+"and lists.name = "+mysql.escape(listName)+"and cards.name = "+mysql.escape(cardName)+" limit 1;";
+    let emails = req.body.emails;
+    let email_array = (emailExtractor.email(emails));
+ 
+    let sql = "select cards.id from lists,boards,cards where boards.name = "+mysql.escape(boardName)+"and lists.name = "+mysql.escape(listName)+"and cards.name = "+mysql.escape(cardName)+" limit 1;";
     con.query(sql,function(err,result,fields){
-        var id = result[0].id;
-        for(var i=0;i<len;i++){
-            var deletesql = "delete from cards where assignedUser = "+mysql.escape(email_array[i])+"and id = "+mysql.escape(id)+";";
+        let id = result[0].id;
+        
+        email_array.forEach( email_array => {
+            let deletesql = "delete from cards where assignedUser = "+mysql.escape(email_array)+"and id = "+mysql.escape(id)+";";
             con.query(deletesql,function(err,result,fields){
                 if(err) throw err;
                 console.log('assigned user deleted');
             })
-        }
+            
+        })
     })
 })
 
