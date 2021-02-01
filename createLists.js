@@ -25,15 +25,15 @@ let x;
 
 router.post("/",function(req,res){
     
-    var listName = req.body.listName;
-    var id = randomGen.randomGen().toString();
+    let listName = req.body.listName;
+    let id = randomGen.randomGen().toString();
 
-    var sql = "insert into lists values ("+mysql.escape(id)+","+mysql.escape(listName)+","+"null);";
+    let sql = "insert into lists values ("+mysql.escape(id)+","+mysql.escape(listName)+","+"null);";
     con.query(sql,function(err,result,fields){
         if(err) throw err;
     })
 
-    var sql = "select lists from boards where name = "+mysql.escape(boardName)+" limit 1 ;"
+    sql = "select lists from boards where name = "+mysql.escape(boardName)+" limit 1 ;"
     con.query(sql,function(err,result,fields){
         if (err) throw err; 
         x = (result[0].lists);   
