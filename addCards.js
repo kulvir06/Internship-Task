@@ -3,13 +3,14 @@ import bodyParser from 'body-parser';
 import randomGen from './user methods/randomGen'
 import emailExtractor from './user methods/emailExtractor.js';
 import mysql from 'mysql';
+import dbconnect from './user methods/connection.js';
+import listCardsUpdate from './user methods/listCardsUpdate'
 
 const router = express.Router();
 router.use(bodyParser.urlencoded({extended: true}));
 router.use(express.json());
 
-const dbconnect = require("./user methods/connection.js");
-const listCardsUpdate = require("./user methods/listCardsUpdate");
+
 const con =dbconnect.connection();
 
 let listName,boardName ;
