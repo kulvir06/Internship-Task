@@ -1,28 +1,25 @@
-const express = require("express");
+import express from 'express';
+import createBoard from "./createBoard.js";
+import createLists from "./createLists.js";
+import deleteBoard from "./deleteBoard.js";
+import addCards from "./addCards.js";
+import deleteList from "./deleteList.js";
+import modifyLists from "./modifyLists.js";
+import updateBoardMember from "./updateBoardMember.js";
+
 const app = express();
 
 
-const createBoard = require("./createBoard.js");
 app.use("/createBoard",createBoard);
-
-const createLists = require("./createLists.js");
 app.use("/createLists",createLists);
-
-const deleteBoard = require("./deleteBoard.js");
 app.use("/deleteBoard",deleteBoard);
-
-const addCards = require("./addCards.js");
 app.use("/addCards",addCards);
-
-const deleteList = require("./deleteList.js");
 app.use("/deleteList",deleteList);
-
-const updateBoardMember = require("./updateBoardMember.js");
 app.use("/updateBoard",updateBoardMember);
-
-const modifyLists = require("./modifyLists.js");
 app.use("/modifyLists",modifyLists);
 
 app.listen(3000,function(){
     console.log("Server is running on port 3000!!");
 })
+
+module.exports = app;
