@@ -1,10 +1,10 @@
-const express = require("express");
-const router = express.Router();
-const bodyParser = require('body-parser');
-const randomGen = require('./user methods/randomGen');
-const emailExtractor = require("./user methods/emailExtractor.js");
-const mysql = require('mysql');
+import express from 'express';
+import bodyParser from 'body-parser';
+import randomGen from './user methods/randomGen'
+import emailExtractor from './user methods/emailExtractor.js';
+import mysql from 'mysql';
 
+const router = express.Router();
 router.use(bodyParser.urlencoded({extended: true}));
 router.use(express.json());
 
